@@ -72,6 +72,12 @@ public class CameraCtrl : MonoBehaviour
                 dist = 20;
             }
 
+            if(Input.GetMouseButton(1))
+            {
+                x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+                y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+            }
+
             //x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             //y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
 

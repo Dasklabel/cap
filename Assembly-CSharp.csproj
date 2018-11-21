@@ -54,8 +54,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\02.Scripts\CameraCtrl.cs" />
+     <Compile Include="Assets\02.Scripts\CharacterOn.cs" />
+     <Compile Include="Assets\02.Scripts\HelpPanel.cs" />
+     <Compile Include="Assets\02.Scripts\MainScene.cs" />
      <Compile Include="Assets\02.Scripts\PlayerCtrl.cs" />
      <Compile Include="Assets\02.Scripts\PlayerMove.cs" />
+     <Compile Include="Assets\02.Scripts\SelectCharacter.cs" />
+     <Compile Include="Assets\02.Scripts\SelectHelpButton.cs" />
+     <Compile Include="Assets\02.Scripts\SelectScene.cs" />
      <Compile Include="Assets\AnimationBaker\Core\AnimationBaker.cs" />
      <Compile Include="Assets\AnimationBaker\Core\BINS.cs" />
      <Compile Include="Assets\Locomotion Setup\Locomotion\Scripts\Locomotion.cs" />

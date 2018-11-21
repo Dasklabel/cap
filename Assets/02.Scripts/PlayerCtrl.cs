@@ -3,24 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerCtrl : MonoBehaviour {
+public class PlayerCtrl : MonoBehaviour
+{
+
+    public GameObject female;
+    public GameObject male;
+    public GameObject police;
+    public GameObject cameraman;
 
     private Transform tr;
     private Animator animator;
     public float moveSpeed = 5.0f;
     public float moveRun = 10.0f;
     private Vector3 moveDir;
-    //public float jumpPower = 7;
-
-
-    public float Speed;
-
+    public float jumpSpeed = 5.0f;
+    public bool isGrounded = false;
+    Rigidbody rb;
 
     void Start()
     {
         tr = GetComponent<Transform>();
         animator = GetComponent<Animator>();
-  
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+        }
     }
 
     void Update()
@@ -32,99 +44,52 @@ public class PlayerCtrl : MonoBehaviour {
 
         moveDir = v * Vector3.forward + h * Vector3.right;
 
-
-        if (Input.GetKey(KeyCode.T))
+        if (isGrounded)
         {
-            animator.SetBool("isHello", true);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.AddForce(new Vector3(0, 1, 0) * jumpSpeed, ForceMode.Impulse);
+                isGrounded = false;
+            }
+        }
+        if (Input.GetKey(KeyCode.T)) // 인사
+        {
+            Handshake();
         }
         else
         {
             animator.SetBool("isHello", false);
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (WalkCheck())
         {
-            tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-            tr.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+            Walk();
 
-            if(Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-                tr.Translate(Vector3.forward * Time.deltaTime * moveRun);
-
-                animator.SetBool("isRun", true);
-
-            }
-                
-            else
-            {
+                if (WalkCheck())
+                {
+                    Run();
+                }
                 animator.SetBool("isRun", false);
-                
             }
-
             animator.SetBool("isMove", true);
+
 
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-            tr.Translate(Vector3.back * Time.deltaTime * -moveSpeed);
+            BackWalk();
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-                tr.Translate(Vector3.back * Time.deltaTime * -moveRun);
-
-                animator.SetBool("isRun", true);
+                Run();
             }
             else
             {
                 animator.SetBool("isRun", false);
             }
-
             animator.SetBool("isMove", true);
-
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-            
-            tr.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
-
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-                tr.Translate(Vector3.forward * Time.deltaTime * moveRun);
-
-                animator.SetBool("isRun", true);
-            }
-            else
-            {
-                animator.SetBool("isRun", false);
-            }
-
-            animator.SetBool("isMove", true);
-
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-            tr.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
-
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
-                tr.Translate(Vector3.forward * Time.deltaTime * moveRun);
-
-                animator.SetBool("isRun", true);
-            }
-            else
-            {
-                animator.SetBool("isRun", false);
-            }
-
-            animator.SetBool("isMove", true);
-
         }
         else
         {
@@ -132,7 +97,40 @@ public class PlayerCtrl : MonoBehaviour {
         }
     }
 
+    void Handshake()
+    {
+        animator.SetBool("isHello", true);
+    }
 
-    
+    void Walk()
+    {
+        tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
+        tr.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+    }
 
+    void BackWalk()
+    {
+        tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
+        tr.Translate(Vector3.back * Time.deltaTime * -moveSpeed);
+    }
+
+    void Run()
+    {
+        tr.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), 1);
+        tr.Translate(Vector3.forward * Time.deltaTime * moveRun);
+
+        animator.SetBool("isRun", true);
+    }
+
+    bool WalkCheck()
+    {
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
